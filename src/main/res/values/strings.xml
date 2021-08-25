@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CrudEx</string>
+    <string name="titulo1">Faça exercícios seu veio</string>
+    <string name="buttonStart">COMEÇAR</string>
+</resources>

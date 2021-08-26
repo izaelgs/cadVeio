@@ -8,13 +8,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DataBase extends SQLiteOpenHelper {
 
     private static final int VERSAO_BANCO = 1;
-    private static final String BANCO_VEIO = "bd.veios";
+    private static final String BANCO_VEIO = "bd_veios";
 
     private static final String TABELA_VEIO = "tb_veios";
-    private static final String COLUNA_ID = "id";
+
+    private static final String COLUNA_ID = "id_veio";
     private static final String COLUNA_IDADE = "idade";
     private static final String COLUNA_TELEFONE = "telefone";
     private static final String COLUNA_NOME = "nome";
@@ -28,9 +32,9 @@ public class DataBase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String QUERY_COLUNA = "CREATE TABLE " + TABELA_VEIO + "(" +
-                COLUNA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUNA_IDADE +
-                " INTEGER, " + COLUNA_TELEFONE + " INTEGER, " +
-                COLUNA_NOME + " TEXT, " + COLUNA_SOBRENOME + " TEXT)";
+                COLUNA_ID + " INTEGER PRIMARY KEY," + COLUNA_IDADE +
+                " INTEGER," + COLUNA_TELEFONE + " BIGINT," +
+                COLUNA_NOME + " VARCHAR(50), " + COLUNA_SOBRENOME + " VARCHAR(50))";
 
         db.execSQL(QUERY_COLUNA);
     }
@@ -48,10 +52,10 @@ public class DataBase extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
 
-        values.put(COLUNA_NOME, veio.getNome());
-        values.put(COLUNA_SOBRENOME, veio.getSobrenome());
         values.put(COLUNA_IDADE, veio.getIdade());
         values.put(COLUNA_TELEFONE, veio.getTelefone());
+        values.put(COLUNA_NOME, veio.getNome());
+        values.put(COLUNA_SOBRENOME, veio.getSobrenome());
 
         db.insert(TABELA_VEIO, null, values);
         db.close();
@@ -65,12 +69,13 @@ public class DataBase extends SQLiteOpenHelper {
         db.close();
     }
 
-    Veio selectVeio(Veio veio){
+    Veio selectVeio(int id){
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABELA_VEIO, new String[]{
                 COLUNA_ID, COLUNA_IDADE, COLUNA_TELEFONE, COLUNA_NOME, COLUNA_SOBRENOME},
-                COLUNA_ID + " = ?", new String[]{ String.valueOf(veio.getId())},
+                COLUNA_ID + " = ?",
+                new String[]{ String.valueOf(id)},
                 null, null, null, null);
 
         if(cursor != null){
@@ -81,5 +86,45 @@ public class DataBase extends SQLiteOpenHelper {
                 Integer.parseInt(cursor.getString(2)), cursor.getString(3), cursor.getString(4));
 
         return veio1;
+    }
+
+    void atualizaVeio(Veio veio){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(COLUNA_IDADE, veio.getIdade());
+        values.put(COLUNA_TELEFONE, veio.getTelefone());
+        values.put(COLUNA_NOME, veio.getNome());
+        values.put(COLUNA_SOBRENOME, veio.getSobrenome());
+
+        db.update(TABELA_VEIO, values, COLUNA_ID + " = ?", new String[]{
+                String.valueOf(veio.getId())
+        });
+    }
+
+    public List<Veio> listaTodosVeios(){
+        List<Veio> listaVeios = new ArrayList<Veio>();
+
+        String query = "SELECT * FROM " + TABELA_VEIO;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()){
+            do{
+                Veio veio = new Veio();
+                veio.setId(Integer.parseInt(c.getString(0)));
+                veio.setIdade(Integer.parseInt(c.getString(1)));
+                veio.setTelefone((Integer.parseInt(c.getString(2))));
+                veio.setNome(c.getString(3));
+                veio.setSobrenome(c.getString(4));
+
+                listaVeios.add(veio);
+            } while (c.moveToNext());
+        }
+
+        return listaVeios;
     }
 }

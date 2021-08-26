@@ -3,7 +3,7 @@ package com.gsiza.crudex;
 public class Veio {
     int id;
     public int idade;
-    public int telefone;
+    public String telefone;
     public String nome;
     public String sobrenome;
 
@@ -11,7 +11,7 @@ public class Veio {
 
     }
 
-    public Veio(int id, int idade, int telefone, String nome, String sobrenome){
+    public Veio(int id, int idade, String telefone, String nome, String sobrenome){
         this.id = id;
         this.idade = idade;
         this.telefone = telefone;
@@ -19,7 +19,7 @@ public class Veio {
         this.sobrenome= sobrenome;
     }
 
-    public Veio(int idade, int telefone, String nome, String sobrenome){
+    public Veio(int idade, String telefone, String nome, String sobrenome){
         this.idade = idade;
         this.telefone = telefone;
         this.nome = nome;
@@ -44,11 +44,11 @@ public class Veio {
         this.idade = idade;
     }
 
-    public int getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(int telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 

@@ -33,7 +33,7 @@ public class DataBase extends SQLiteOpenHelper {
 
         String QUERY_COLUNA = "CREATE TABLE " + TABELA_VEIO + "(" +
                 COLUNA_ID + " INTEGER PRIMARY KEY," + COLUNA_IDADE +
-                " INTEGER," + COLUNA_TELEFONE + " BIGINT," +
+                " INTEGER," + COLUNA_TELEFONE + " VARCHAR(15)," +
                 COLUNA_NOME + " VARCHAR(50), " + COLUNA_SOBRENOME + " VARCHAR(50))";
 
         db.execSQL(QUERY_COLUNA);
@@ -83,7 +83,7 @@ public class DataBase extends SQLiteOpenHelper {
         }
 
         Veio veio1 = new Veio(Integer.parseInt(cursor.getString(0)), Integer.parseInt(cursor.getString(1)),
-                Integer.parseInt(cursor.getString(2)), cursor.getString(3), cursor.getString(4));
+                cursor.getString(2), cursor.getString(3), cursor.getString(4));
 
         return veio1;
     }
@@ -117,7 +117,7 @@ public class DataBase extends SQLiteOpenHelper {
                 Veio veio = new Veio();
                 veio.setId(Integer.parseInt(c.getString(0)));
                 veio.setIdade(Integer.parseInt(c.getString(1)));
-                veio.setTelefone((Integer.parseInt(c.getString(2))));
+                veio.setTelefone(c.getString(2));
                 veio.setNome(c.getString(3));
                 veio.setSobrenome(c.getString(4));
 

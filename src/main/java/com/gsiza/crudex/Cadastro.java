@@ -75,7 +75,7 @@ public class Cadastro extends AppCompatActivity {
                 nome.setText(veio.getNome());
                 sobrenome.setText(veio.getSobrenome());
                 idade.setText(String.valueOf(veio.getIdade()) );
-                telefone.setText(String.valueOf(veio.getTelefone()));
+                telefone.setText(veio.getTelefone());
             }
         });
 
@@ -93,7 +93,7 @@ public class Cadastro extends AppCompatActivity {
                 } else if(ident.isEmpty()){
                     Veio novo = new Veio();
                     novo.setIdade(Integer.parseInt(idades));
-                    novo.setTelefone(Integer.parseInt(telefones));
+                    novo.setTelefone(telefones);
                     novo.setNome(nomes);
                     novo.setSobrenome(sobrenomes);
 
@@ -108,7 +108,7 @@ public class Cadastro extends AppCompatActivity {
                     listarVeios();
                 } else{
                     db.atualizaVeio(new Veio(Integer.parseInt(ident), Integer.parseInt(idades),
-                            Integer.parseInt(telefones), nomes, sobrenomes));
+                            telefones, nomes, sobrenomes));
 
                     Toast.makeText(Cadastro.this, "Veio atualizado com sucesso", Toast.LENGTH_LONG).show();
 

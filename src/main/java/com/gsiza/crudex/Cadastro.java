@@ -139,21 +139,6 @@ public class Cadastro extends AppCompatActivity {
                 }
             }
         });
-
-
-        Veio veio = db.selectVeio(10);
-    }
-
-    public void cadVeio(View view){
-        Veio v = new Veio();
-        v.setNome(nome.getText().toString());
-        v.setSobrenome(sobrenome.getText().toString());
-        v.setIdade(Integer.parseInt(idade.getText().toString()));
-        v.setTelefone(Integer.parseInt(telefone.getText().toString()));
-
-        db.cadVeio(v);
-
-        Log.d("Banco de Dados", "deu certo carai"+v);
     }
 
     public void listarVeios(){
@@ -167,7 +152,6 @@ public class Cadastro extends AppCompatActivity {
         lista.setAdapter(adapter);
 
         for(Veio v : veios){
-            //Log.d("Lista", "\nID: "+ v.getId() + " Nome: " + v.getNome());
             arrayList.add(v.getId()+ "-"+v.getNome());
             adapter.notifyDataSetChanged();
         }

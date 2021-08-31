@@ -1,5 +1,6 @@
 package com.gsiza.crudex;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,8 +15,10 @@ import java.util.List;
 public class DataBase extends SQLiteOpenHelper {
 
     private static final int VERSAO_BANCO = 1;
+
     private static final String BANCO_VEIO = "bd_veios";
 
+    //TABELA DOS VELHO
     private static final String TABELA_VEIO = "tb_veios";
 
     private static final String COLUNA_ID = "id_veio";
@@ -24,6 +27,20 @@ public class DataBase extends SQLiteOpenHelper {
     private static final String COLUNA_NOME = "nome";
     private static final String COLUNA_SOBRENOME = "sobrenome";
 
+    //TABELA SEMANA
+    private static final String TABELA_SEMANA = "tb_semana";
+
+    private static final String COLUNA_ID_SEMANA = "id_semana";
+    private static final String COLUNA_ID_VEIO = "id_veio";
+    private static final String COLUNA_ID_SABADO = "id_sab";
+    private static final String COLUNA_ID_SEGUNDA = "id_seg";
+    private static final String COLUNA_ID_TERCA = "id_ter";
+    private static final String COLUNA_ID_QUARTA = "id_qua";
+    private static final String COLUNA_ID_QUINTA = "id_qui";
+    private static final String COLUNA_ID_SEXTA = "id_sex";
+    private static final String COLUNA_ID_DOMINGO = "id_dom";
+
+
     public DataBase(@Nullable Context context) {
         super(context, BANCO_VEIO, null, VERSAO_BANCO);
     }
@@ -31,12 +48,19 @@ public class DataBase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String QUERY_COLUNA = "CREATE TABLE " + TABELA_VEIO + "(" +
+        String QUERY_VEIO = "CREATE TABLE " + TABELA_VEIO + "(" +
                 COLUNA_ID + " INTEGER PRIMARY KEY," + COLUNA_IDADE +
                 " INTEGER," + COLUNA_TELEFONE + " VARCHAR(15)," +
                 COLUNA_NOME + " VARCHAR(50), " + COLUNA_SOBRENOME + " VARCHAR(50))";
 
-        db.execSQL(QUERY_COLUNA);
+        String QUERY_SEMANA = "CREATE TABLE " + TABELA_SEMANA + "(" +
+                COLUNA_ID_SEMANA + " INTEGER PRIMARY KEY," + COLUNA_ID_VEIO + " INTEGER," +
+                COLUNA_ID_SABADO + " INT," + COLUNA_ID_SEGUNDA + " INTEGER, "+ COLUNA_ID_TERCA + " INTEGER, "+
+                COLUNA_ID_QUARTA + " INTEGER, "+ COLUNA_ID_QUINTA + " INTEGER, "+ COLUNA_ID_SEXTA + " INTEGER, "+
+                COLUNA_ID_DOMINGO + " INTEGER)";
+
+        db.execSQL(QUERY_VEIO);
+        db.execSQL(QUERY_SEMANA);
     }
 
     @Override
@@ -44,7 +68,7 @@ public class DataBase extends SQLiteOpenHelper {
 
     }
 
-    /* CRUD ABAIXO*/
+    /* CRUD VEIO*/
 
     void cadVeio(Veio veio){
 
@@ -88,6 +112,30 @@ public class DataBase extends SQLiteOpenHelper {
         return veio1;
     }
 
+    @SuppressLint("Range")
+    Veio verificaVeio(Veio veio){
+
+        SQLiteDatabase db = getWritableDatabase();
+        String queryTodosUsers = "SELECT * FROM " + TABELA_VEIO + " WHERE " + TABELA_VEIO +
+                "." + COLUNA_NOME + " = " + "'" + veio.nome + "'";
+
+        Cursor c = db.rawQuery(queryTodosUsers, null);
+
+        while (c.moveToNext()){
+            if (veio.getNome().equals(c.getString(c.getColumnIndex("nome")))){
+                if (veio.getSobrenome().equals(c.getString(c.getColumnIndex("sobrenome")))){
+
+                    Veio veio1 = new Veio(Integer.parseInt(c.getString(0)), Integer.parseInt(c.getString(1)),
+                            c.getString(2), c.getString(3), c.getString(4));
+
+                    return veio1;
+                }
+            }
+        }
+
+        return (null);
+    }
+
     void atualizaVeio(Veio veio){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -128,3 +176,7 @@ public class DataBase extends SQLiteOpenHelper {
         return listaVeios;
     }
 }
+
+    /* CRUD SEMANA*/
+
+

@@ -21,8 +21,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void intentInicial(View view){
-        Intent intentCad = new Intent(this, Cadastro.class);
+    public void IntentCadastro(View view){
+        Intent intentCad = new Intent(this, CadastroActivity.class);
         startActivity(intentCad);
+    }
+
+    public void intentLogin(View view){
+        Intent intentIntentLogin = new Intent(this, LoginActivity.class);
+        startActivity(intentIntentLogin);
     }
 }
